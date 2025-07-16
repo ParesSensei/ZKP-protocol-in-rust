@@ -7,3 +7,6 @@ edition = "2024"
 rand = "0.8.0"
 num-bigint = { version = "0.4.0", features = ["rand"]}
 hex = "0.4.3"
+
+[build-dependencies]
+tonic-build = "0.9"
