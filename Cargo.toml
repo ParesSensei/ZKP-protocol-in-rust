@@ -7,6 +7,17 @@ edition = "2024"
 rand = "0.8.0"
 num-bigint = { version = "0.4.0", features = ["rand"]}
 hex = "0.4.3"
+tonic = "0.9"
+prost = "0.11"
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
 
 [build-dependencies]
 tonic-build = "0.9"
+
+[[bin]]
+name = "server"
+path = "./src/server.rs"
+
+[[bin]]
+name = "client"
+path = "./src/client.rs"

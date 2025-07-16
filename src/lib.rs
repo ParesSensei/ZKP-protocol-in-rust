@@ -1,6 +1,6 @@
 use num_bigint::{BigUint, RandBigInt};
 use rand;
-use hex;
+
 
 pub struct ZKP {
     p: BigUint,
