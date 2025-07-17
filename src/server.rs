@@ -79,7 +79,7 @@ impl Auth for AuthImpl {
         }
     }
 
-     async fn verify_authentication(&self, request: Request<AuthenticationAnswerRequest>) -> Result<Response<AuthenticationAnswerResponse>, Status> {
+    async fn verify_authentication(&self, request: Request<AuthenticationAnswerRequest>) -> Result<Response<AuthenticationAnswerResponse>, Status> {
         todo!()
     }
 }
