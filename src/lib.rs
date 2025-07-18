@@ -1,12 +1,12 @@
 use num_bigint::{BigUint, RandBigInt};
-use rand;
+use rand::{self, Rng};
 
 
 pub struct ZKP {
-    p: BigUint,
-    q: BigUint,
-    alpha: BigUint,
-    beta: BigUint,
+    pub p: BigUint,
+    pub q: BigUint,
+    pub alpha: BigUint,
+    pub beta: BigUint,
 }
 
 impl ZKP {
@@ -42,10 +42,18 @@ impl ZKP {
         cond1 && cond2
     }
 
-    pub fn generator_random_less_than(bound: &BigUint) -> BigUint {
+    pub fn generate_random_number_below(bound: &BigUint) -> BigUint {
         let mut rng = rand::thread_rng();
 
         rng.gen_biguint_below(bound)
+    }
+
+    pub fn generate_random_string(size: usize) -> String {
+        rand::thread_rng()
+            .sample_iter(rand::distributions::Alphanumeric)
+            .take(size)
+            .map(char::from)
+            .collect()
     }
 
     pub fn get_constants() -> (BigUint, BigUint, BigUint, BigUint) {
@@ -56,7 +64,7 @@ impl ZKP {
         let alpha = BigUint::from_bytes_be(&hex::decode("A4D1CBD5C3FD34126765A442EFB99905F8104DD258AC507FD6406CFF14266D31266FEA1E5C41564B777E690F5504F213160217B4B01B886A5E91547F9E2749F4D7FBD7D3B9A92EE1909D0D2263F80A76A6A24C087A091F531DBF0A0169B6A28AD662A4D18E73AFA32D779D5918D08BC8858F4DCEF97C2A24855E6EEB22B3B2E5").unwrap());
 
         // beta = alpha^i is also a generator
-        let beta = alpha.modpow(&ZKP::generator_random_less_than(&q), &p);
+        let beta = alpha.modpow(&ZKP::generate_random_number_below(&q), &p);
         
         (alpha, beta, p, q)
     }
@@ -115,9 +123,9 @@ mod test {
         };
 
         let x = BigUint::from(6u32);
-        let k = ZKP::generator_random_less_than(&q);
+        let k = ZKP::generate_random_number_below(&q);
 
-        let c = ZKP::generator_random_less_than(&q);
+        let c = ZKP::generate_random_number_below(&q);
 
         let y1 = ZKP::exponentiate(&alpha, &x, &p);
         let y2 = ZKP::exponentiate(&beta, &x, &p);
@@ -165,7 +173,7 @@ mod test {
         let alpha = BigUint::from_bytes_be(&hex::decode("A4D1CBD5C3FD34126765A442EFB99905F8104DD258AC507FD6406CFF14266D31266FEA1E5C41564B777E690F5504F213160217B4B01B886A5E91547F9E2749F4D7FBD7D3B9A92EE1909D0D2263F80A76A6A24C087A091F531DBF0A0169B6A28AD662A4D18E73AFA32D779D5918D08BC8858F4DCEF97C2A24855E6EEB22B3B2E5").unwrap());
 
         // beta = alpha^i is also a generator
-        let beta = alpha.modpow(&ZKP::generator_random_less_than(&q), &p);
+        let beta = alpha.modpow(&ZKP::generate_random_number_below(&q), &p);
         let zkp = ZKP {
             p: p.clone(),
             q: q.clone(),
@@ -173,10 +181,10 @@ mod test {
             beta: beta.clone()
         };
 
-        let x = ZKP::generator_random_less_than(&q);
-        let k = ZKP::generator_random_less_than(&q);
+        let x = ZKP::generate_random_number_below(&q);
+        let k = ZKP::generate_random_number_below(&q);
 
-        let c = ZKP::generator_random_less_than(&q);
+        let c = ZKP::generate_random_number_below(&q);
 
         let y1 = ZKP::exponentiate(&alpha, &x, &p);
         let y2 = ZKP::exponentiate(&beta, &x, &p);
@@ -235,7 +243,7 @@ mod test {
         let alpha = BigUint::from_bytes_be(&hex::decode("AC4032EF4F2D9AE39DF30B5C8FFDAC506CDEBE7B89998CAF74866A08CFE4FFE3A6824A4E10B9A6F0DD921F01A70C4AFAAB739D7700C29F52C57DB17C620A8652BE5E9001A8D66AD7C17669101999024AF4D027275AC1348BB8A762D0521BC98AE247150422EA1ED409939D54DA7460CDB5F6C6B250717CBEF180EB34118E98D119529A45D6F834566E3025E316A330EFBB77A86F0C1AB15B051AE3D428C8F8ACB70A8137150B8EEB10E183EDD19963DDD9E263E4770589EF6AA21E7F5F2FF381B539CCE3409D13CD566AFBB48D6C019181E1BCFE94B30269EDFE72FE9B6AA4BD7B5A0F1C71CFFF4C19C418E1F6EC017981BC087F2A7065B384B890D3191F2BFA").unwrap());
 
         // beta = alpha^i is also a generator
-        let beta = alpha.modpow(&ZKP::generator_random_less_than(&q), &p);
+        let beta = alpha.modpow(&ZKP::generate_random_number_below(&q), &p);
         let zkp = ZKP {
             p: p.clone(),
             q: q.clone(),
@@ -243,10 +251,10 @@ mod test {
             beta: beta.clone()
         };
 
-        let x = ZKP::generator_random_less_than(&q);
-        let k = ZKP::generator_random_less_than(&q);
+        let x = ZKP::generate_random_number_below(&q);
+        let k = ZKP::generate_random_number_below(&q);
 
-        let c = ZKP::generator_random_less_than(&q);
+        let c = ZKP::generate_random_number_below(&q);
 
         let y1 = ZKP::exponentiate(&alpha, &x, &p);
         let y2 = ZKP::exponentiate(&beta, &x, &p);
