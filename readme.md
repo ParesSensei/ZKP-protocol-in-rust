@@ -51,7 +51,9 @@ Where:
 The prover computes:
 
 s = k - c * x mod q
+
 t1 = g^s * α^c mod p
+
 t2 = h^s * β^c mod p
 
 
